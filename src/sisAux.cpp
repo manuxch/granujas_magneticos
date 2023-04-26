@@ -18,7 +18,6 @@ std::string n2s(int num) {
 
 bool isActive(b2World *w) {
     BodyData* infGr;
-    b2Vec2 posGr;
     for (b2Body *bd = w->GetBodyList(); bd; bd = bd->GetNext()) {
         infGr = (BodyData*) (bd->GetUserData()).pointer;
         if (infGr->isGrain && bd->IsAwake()) return true;
@@ -30,7 +29,7 @@ void saveFrame(b2World *w, const GlobalSetup *gs, int fID) {
     string foutName = gs->preFrameFile + "_" + n2s(fID) + ".xy";
     std::ofstream fileF;
     fileF.open(foutName.c_str());
-    b2Vec2 v2; float xtmp, ytmp;
+    float xtmp, ytmp;
     for ( b2Body* bd = w->GetBodyList(); bd; bd = bd->GetNext()) {
         BodyData *infGr = (BodyData*) (bd->GetUserData()).pointer;
         fileF << infGr->gID << " ";
@@ -99,7 +98,7 @@ int countDesc(b2World *w, int *st, int maxDiam) {
 
 void setMagneticForces(b2World *w) {
     BodyData *i1, *i2;
-    b2Vec2 r1, r2, r12, sumF;
+    b2Vec2 r1, r2, r12;
     float fB, r;
     for (b2Body *bd1 = w->GetBodyList(); bd1; bd1 = bd1->GetNext()) {
         i1 = (BodyData*) (bd1->GetUserData()).pointer;
@@ -237,8 +236,8 @@ void apply_MF_base_friction(b2World *w, GlobalSetup* gs) {
     b2Vec2 vtmp;
     float vtmpM, fricBase;
     for (b2Body *bd = w->GetBodyList(); bd; bd = bd->GetNext()) {
-        bd->ApplyForce(infGr->f, bd->GetWorldCenter(), true);
         infGr = (BodyData*) (bd->GetUserData()).pointer;
+        bd->ApplyForce(infGr->f, bd->GetWorldCenter(), true);
         vtmp = bd->GetLinearVelocity();
         vtmpM = vtmp.Length();
         if (vtmpM > gs->caja.vUmbralFricStat) {

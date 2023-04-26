@@ -11,8 +11,10 @@ BOX2D = /home/manuel/Tools/box2d/2-4-1
 LIBPATH = -L$(BOX2D)/build/bin
 INCLUDES = -I$(BOX2D)/include
 LIBS = -lbox2d -lm
-CXXFLAGS = -O3 $(INCLUDES)
-LDFLAGS = -O3 -Wall $(LIBPATH) -static $(LIBS)
+CXXFLAGS = -O0 $(INCLUDES)
+LDFLAGS = -O0 -Wall $(LIBPATH) -static $(LIBS)
+#CXXFLAGS = -O3 $(INCLUDES)
+#LDFLAGS = -O3 -Wall $(LIBPATH) -static $(LIBS)
 
 OBJS = selfMag.o globalSetup.o sisAux.o
 

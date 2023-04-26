@@ -5,8 +5,8 @@
  * de granos autopropulsados con dipolos magnéticos.
  *
  * \author Manuel Carlevaro <manuel@iflysib.unlp.edu.ar>
- * \version 2.0 
- * \date 2022.09.06
+ * \version 2.1 
+ * \date 2023.04.22
  */
 
 
@@ -169,7 +169,6 @@ int main(int argc, char *argv[])
     Energias eKU {0.0, 0.0};
 
     cout << "# Inicio de la simulación..." << endl;
-    b2Vec2 pos, avec; 
     int paso = 0;
     bool saveFrm = (globalSetup->saveFrameFreq > 0 ? true : false);
     bool saveXVC = (globalSetup->xvcFreq > 0 ? true : false);
@@ -181,8 +180,6 @@ int main(int argc, char *argv[])
         fileE << "# t e_Kinetic e_Potential" << endl;
     }
 
-
-    b2Vec2 vtmp;
 
     // Primeros pasos para satisfacer restricciones
     for (int i = 0; i < 10; ++i) world.Step(timeStep, pIterations, vIterations);
