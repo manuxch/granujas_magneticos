@@ -1,0 +1,91 @@
+# params.ini
+# Archivo con parámetros que definen la simulación
+# de selfMag en Box2D
+# Manuel Carlevaro
+# 2020.07.22 
+
+# Nota: Box2D utiliza el sistema métrico MKS
+
+# Detalles del contenedor
+
+# Caja 
+#	[Radio_caja]: radio del polígono que constituye la caja (R)
+#	[n_vertices]: cantidad de vértices del polígono contenedor
+#	[Caja_fric]: Coeficiente de fricción de la caja 0 <= Caja_fric 
+#	[Caja_rest]: Coeficiente de restitución de la caja 0 <= Caja_rest <= 1
+#   [fricGB_static]: Coeficiente de fricción estática grano-base
+#   [fricGB_dynamic]: Coeficiente de fricción dinámica grano-base
+Radio_caja: 20.25
+n_vertices: 40
+Caja_fric: 0.1
+Caja_rest: 1.3
+fricGB_static: 0.35
+fricGB:dynamic: 0.35
+
+# Granos
+#	[noTipoGranos]: cantidad de tipos de granos diferentes
+#	Por cada tipo de grano:
+#	[noGranos radio nLados dens fric rest m r] 
+#   (int double int double double double double int)
+#	Notas:
+#		nLados = 1 es un disco, o 3 <= nLados <= 8
+#		[radio] = m
+#       [dens] = kg/m^2
+#		[fric]: Coeficiente de fricción del grano 0 <= fric 
+#		[rest]: Coeficiente de restitución del grano 0 <= rest <= 1
+#       [m]: A m^2 = J/T Momento dipolar magnético \vec{m} = [0, 0, m]
+#       [r]: 0 si avanza en el sentido de la orientación del grano, 0 en 
+#            reversa
+noTipoGranos: 2
+__n1__ 0.5 1 1.0 0.5 0.1  1500.0 0
+__n2__ 0.5 1 1.0 0.5 0.1 -1500.0 0
+
+# Control de la simulación
+#	[timeStep]: Paso de integración del movimiento (en s)
+#   [tMax]: Máximo tiempo de simulación (en s)
+#   [finEkin]: Energía cinética mínima para finalizar la simulación (en J)
+#	[pIter]: iteraciones de posicion para la satisfacción de restricciones
+#	[vIter]: iteraciones de velocidad para la satisfacción de restricciones
+#	[g]: Aceleracion de la gravedad
+#   [noise]: Intensidad del impulso de vibración (en Ns)
+#   [noiseFreq]: Frecuencia de aplicación del ruido (en pasos)
+#   [tNoiseOff]: Instante de tiempo en que se apaga el ruido (en s)
+#   [atenuacion_rot]: Factor de atenuación de rotaciones
+#   [Bullets]: T si se consideran bullets los granos
+#   [RandomSeed]: Semilla del generador de números aleatorios
+#   [tapping]: T: tapping, F: vibrating
+#   [n_taps]: Cantidad de taps a registrar
+#   [preTapFile]: Prefijo de los archivos de tapping
+timeStep: 0.005 
+tMax: 1.0
+finEkin: 0.2
+pIter: 50
+vIter: 50
+g: 9.8
+noise: 4.0
+noiseFreq: 100
+tNoiseOff: 4.0
+atenuacion_rot: 0.95
+Bullets: T
+tapping: T
+n_taps: 20
+preTapFile: tap
+RandomSeed: 131
+
+# Parámetros de registro
+#	[saveFrameFreq]: Paso de guardado de los frames
+#	[preFrameFile]: prefijo del archivo de salida de frames
+#	[xvcFreq]: Paso de guardado de coordenadas, velocidades y contactos (x,v,c)
+#   [xvcFile]: prefijo de los archivos de salida de (x,v,c)
+#   [enerFreq]: Paso de guardado de energías
+#   [enerFile]: Archivo para el registro de energías
+#   [finXVCFile]: Archivo coordenadas, velocidades y contactos finales
+saveFrameFreq: 0
+preFrameFile: frm
+xvc_Freq: 0
+xvc_File: tap___n1_____n2__
+enerFreq: 50
+enerFile: energias.dat
+finXVCFile: final700
+
+# Fin de params.ini

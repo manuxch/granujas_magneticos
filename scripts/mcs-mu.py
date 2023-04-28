@@ -2,7 +2,6 @@
 '''Programa para el análisis del tamaño máximo de clusters utilizando grafos.'''
 
 import glob
-import matplotlib.pyplot as plt
 import networkx as nx
 import numpy as np
 import sys
