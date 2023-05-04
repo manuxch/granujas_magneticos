@@ -7,6 +7,7 @@ import networkx as nx
 import numpy as np
 import sys
 import argparse
+from math import sqrt
 
 def mean_cluster_size(file):
     fin = open(file, 'r')
@@ -33,14 +34,14 @@ def mean_cluster_size(file):
 parser = argparse.ArgumentParser(
     description='Calcula el tamaño medio de clusters en función de la proporción.')
 parser.add_argument('-o', '--output', default='max_cluster_sizes.dat',
-            help='Archivo de guardado de resultados.')
+            help='Archivo de guardado de max_clusultados.')
 parser.add_argument('-p', '--prefix', required = True,
             help='Prefijo del nombre de archivos xvc.')
-parser.add_argument('-n', '--nTotal', required = True, type=int,
-            help='Número total de granos en el sistema.')
+# parser.add_argument('-n', '--nTotal', required = True, type=int,
+            # help='Número total de granos en el sistema.')
 args = parser.parse_args()
 
-n_total = args.nTotal
+# n_total = args.nTotal
 f_out = args.output
 
 file_list = []
@@ -50,33 +51,40 @@ n_files = len(file_list)
 file_list.sort()
 print(f"Cantidad de archivos a procesar: {len(file_list)}")
 
-res = {}
-pf = []
+max_clus = {}  # clave: n1 valor: [max_clus_1, max_clus_2, ...]
+n1On2 = []
 mcf = []
 mcf_std = []
 
 for f in file_list:
     fl = (f.split('.')[0]).split('_')
-    res[int(fl[1])] = []
+    max_clus[int(fl[1])] = [[], []]
+    n12 = np.loadtxt(f, usecols=(7), unpack=True)
+    u, c = np.unique(n12, return_counts=True)
+    n_total = c[0] + c[1]
+    max_clus[c[0]][0].append(c[1])
+
 
 for f in file_list:
     fl = (f.split('.')[0]).split('_')
     lc = mean_cluster_size(f)
-    res[int(fl[1])].append(lc[0] / n_total)
-    # res[int(fl[1])].append(lc[0] / sum(lc))
+    n_total = max_clus[int(fl[1])][0][0] + int(fl[1])
+    max_clus[int(fl[1])][1].append(lc[0] / n_total)
+    # max_clus[int(fl[1])].append(lc[0] / sum(lc))
 
-for n_p in sorted(res.keys()):
-    arr = np.array(res[n_p])
-    print(n_p, arr.sum(), n_p/arr.sum(), arr.mean(), arr.std())
-    pf.append(n_p / n_total)
+for n_p in sorted(max_clus.keys()):
+    arr = np.array(max_clus[n_p][1])
+    # print(n_p, arr.sum(), n_p/arr.sum(), arr.mean(), arr.std())
+    n1On2.append(n_p / max_clus[n_p][0][0])
     mcf.append(arr.mean())
-    mcf_std.append(arr.std())
+    mcf_std.append(arr.std() / sqrt(arr.size))
 
 fout = open(f_out, 'w')
 fout.write("# p_fraction, max_clus_size.mean, max_clus_size.std\n")
-for p, m, s in zip(pf, mcf, mcf_std):
-   sout = f"{p}, {m}, {s}\n"
-   fout.write(sout)
+for p, m, s in zip(n1On2, mcf, mcf_std):
+   sout = f"{p}, {m}, {s}"
+   print(sout)
+   fout.write(sout + "\n")
 
 fout.close()
 

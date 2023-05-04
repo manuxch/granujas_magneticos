@@ -6,6 +6,7 @@ import networkx as nx
 import numpy as np
 import sys
 import argparse
+from math import sqrt
 
 def mean_cluster_size(file):
     fin = open(file, 'r')
@@ -66,16 +67,17 @@ for f in file_list:
 
 for mu in sorted(res.keys()):
     arr = np.array(res[mu])
-    print(mu, arr.sum(), arr.mean(), arr.std())
-    mu1.append(mu / 1000)
+    # print(mu, arr.sum(), arr.mean(), arr.std())
+    mu1.append(mu / 1500)
     mcf.append(arr.mean())
-    mcf_std.append(arr.std())
+    mcf_std.append(arr.std() / sqrt(arr.size))
 
 fout = open(f_out, 'w')
 fout.write("# p_fraction, max_clus_size.mean, max_clus_size.std\n")
 for p, m, s in zip(mu1, mcf, mcf_std):
-   sout = f"{p}, {m}, {s}\n"
-   fout.write(sout)
+   sout = f"{p}, {m}, {s}"
+   print(sout)
+   fout.write(sout + "\n")
 
 fout.close()
 
